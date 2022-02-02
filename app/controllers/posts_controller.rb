@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: %i[ show update destroy ]
+  before_action :set_post, only: %i[ show update destroy increment_count ]
 
   # GET /posts
   def index
@@ -27,6 +27,14 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1
   def update
     if @post.update(post_params)
+      render json: @post
+    else
+      render json: @post.errors, status: :unprocessable_entity
+    end
+  end
+
+  def increment_count
+    if @post.add_30_seconds
       render json: @post
     else
       render json: @post.errors, status: :unprocessable_entity
